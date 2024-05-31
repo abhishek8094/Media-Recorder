@@ -7,7 +7,7 @@ function App() {
   
 
   return (
-   <div>
+   <div className='bg-[#00ffae] w-full h-[100vh]'>
     <Header/>
     <Main/>
    </div>
