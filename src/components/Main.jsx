@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useReactMediaRecorder } from "react-media-recorder";
+import { toast } from "react-toastify"; 
 
 const Main = () => {
   const [recordingChoice, setRecordingChoice] = useState({
@@ -44,7 +45,7 @@ const Main = () => {
         videoChoice: true,
         screenChoice: false,
       });
-    } else if (value == "screen-audio") {
+    } else if (value === "screen-audio") {
       setRecordingChoice({
         audioChoice: true,
         videoChoice: false,
@@ -58,6 +59,32 @@ const Main = () => {
       videoRef.current.srcObject = previewStream;
     }
   }, [previewStream]);
+
+  const handleStartRecording = () => {
+    if (!videoChoice && !audioChoice && !screenChoice) {
+      toast.error("Please select a recording option");
+      return;
+    }
+
+    startRecording();
+
+    if (videoChoice && audioChoice) {
+      toast.success("Video and Audio Recording started");
+    } else if (screenChoice && audioChoice) {
+      toast.success("Screen and Audio Recording started");
+    } else if (videoChoice) {
+      toast.success("Video Recording started");
+    } else if (audioChoice) {
+      toast.success("Audio Recording started");
+    } else if (screenChoice) {
+      toast.success("Screen Recording started");
+    }
+  };
+
+  const handleStopRecording = () => {
+    stopRecording();
+    toast.info("Recording stopped");
+  };
 
   return (
     <main className="flex flex-col md:flex-row items-center justify-between">
@@ -155,13 +182,13 @@ const Main = () => {
 
         <div className="flex items-center mt-4 justify-center font-serif">
           <button
-            onClick={startRecording}
+            onClick={handleStartRecording}
             className="m-2 p-2 bg-green-600 hover:bg-green-800 rounded-md text-yellow-50"
           >
             Start Recording
           </button>
           <button
-            onClick={stopRecording}
+            onClick={handleStopRecording}
             className="bg-red-600 hover:bg-red-700 p-2 rounded-md text-yellow-50"
           >
             Stop Recording
